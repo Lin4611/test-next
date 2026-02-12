@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  pull-requests: write
   contents: read
+  pull-requests: write
 
 jobs:
   promote:
@@ -15,12 +15,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # 很重要，否則抓不到完整 commit 歷史
+          fetch-depth: 0   # 必須完整歷史
+
+      - name: Fetch dev branch
+        run: git fetch origin dev
 
       - name: Generate commit log
         id: commits
         run: |
-          LOG=$(git log dev..${{ github.ref_name }} --pretty=format:"- %s")
+          LOG=$(git log origin/dev..HEAD --pretty=format:"- %s")
           echo "log<<EOF" >> $GITHUB_OUTPUT
           echo "$LOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
