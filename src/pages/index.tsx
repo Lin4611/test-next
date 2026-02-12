@@ -4,6 +4,7 @@ import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { addDays } from "date-fns";
 import { type DateRange } from "react-day-picker";
+import { Button } from "@/components/ui/button";
 export default function Home() {
   const [range, setRange] = React.useState<DateRange | undefined>({
     from: new Date(new Date().getFullYear(), 11, 8),
@@ -16,6 +17,7 @@ export default function Home() {
         <CardContent>
           <p>hello</p>
         </CardContent>
+        <Button>Button</Button>
       </Card>
       <CardContent className="p-0">
         <Calendar
