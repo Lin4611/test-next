@@ -12,6 +12,11 @@ export default function Home() {
   return (
     <Card className="mx-auto w-fit p-0">
       <h1 className="text-amber-500">this is dev we change</h1>
+      <Card>
+        <CardContent>
+          <p>hello</p>
+        </CardContent>
+      </Card>
       <CardContent className="p-0">
         <Calendar
           mode="range"
