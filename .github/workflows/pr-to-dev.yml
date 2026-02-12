@@ -1,0 +1,17 @@
+name: pr to dev
+
+on:
+    workflow_dispatch:
+
+jobs:
+    create-pr:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Create Pull Request to dev
+              uses: repo-sync/pull-request@v2
+              with:
+                source_branch: ${{ github.ref_name }}
+                destination_branch: dev
+                pr_title: "Promote ${{ github.ref_name }} to dev"
+                pr_body: "Auto-generated PR to promote branch to dev."
+                github_token: ${{ secrets.GITHUB_TOKEN }}
