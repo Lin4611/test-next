@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
   pull-requests: write
+  contents: read
 
 jobs:
   promote:
@@ -14,6 +14,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 很重要，否則抓不到完整 commit 歷史
+
+      - name: Generate commit log
+        id: commits
+        run: |
+          LOG=$(git log dev..${{ github.ref_name }} --pretty=format:"- %s")
+          echo "log<<EOF" >> $GITHUB_OUTPUT
+          echo "$LOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create Pull Request to dev
         uses: repo-sync/pull-request@v2
@@ -21,5 +31,9 @@ jobs:
           source_branch: ${{ github.ref_name }}
           destination_branch: dev
           pr_title: "Promote ${{ github.ref_name }} to dev"
-          pr_body: "Auto-generated PR."
+          pr_body: |
+            ## 🚀 Changes
+
+            ${{ steps.commits.outputs.log }}
+
           github_token: ${{ secrets.GITHUB_TOKEN }}
